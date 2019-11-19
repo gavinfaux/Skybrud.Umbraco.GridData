@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Skybrud.Essentials.Json.Extensions;
+using Skybrud.Umbraco.GridData.Converters;
 
 namespace Skybrud.Umbraco.GridData.Values {
 
     /// <summary>
     /// Class representing the macro value of a control.
     /// </summary>
-    public class GridControlMacroValue : GridControlValueBase {
+    [GridConverter("macro")]
+    public class GridControlMacroValue : GridControlObjectBase {
 
         /// <summary>
         /// Gets the syntax of the macro.
@@ -37,33 +39,17 @@ namespace Skybrud.Umbraco.GridData.Values {
         public override bool IsValid => !String.IsNullOrWhiteSpace(MacroAlias);
 
         #region Constructors
-
         /// <summary>
-        /// Initializes a new instance based on the specified <paramref name="control"/> and <paramref name="obj"/>.
+        /// Initializes a new instance based on the specified <paramref name="control"/> and <paramref name="token"/>.
         /// </summary>
         /// <param name="control">An instance of <see cref="GridControl"/> representing the control.</param>
-        /// <param name="obj">An instance of <see cref="JObject"/> representing the value of the control.</param>
-        protected GridControlMacroValue(GridControl control, JObject obj) : base(control, obj) {
-            Syntax = obj.GetString("syntax");
-            MacroAlias = obj.GetString("macroAlias");
-            Parameters = obj.GetObject("macroParamsDictionary").ToObject<Dictionary<string, object>>();
+        /// <param name="token">An instance of <see cref="JToken"/> representing the value of the control.</param>
+        public GridControlMacroValue(GridControl control, JToken token) : base(control, token) {
+            Syntax = JObject.GetString("syntax");
+            MacroAlias = JObject.GetString("macroAlias");
+            Parameters = JObject.GetObject("macroParamsDictionary").ToObject<Dictionary<string, object>>();
         }
 
         #endregion
-
-        #region Static methods
-
-        /// <summary>
-        /// Gets a macro value from the specified <paramref name="control"/> and <paramref name="obj"/>.
-        /// </summary>
-        /// <param name="control">The parent control.</param>
-        /// <param name="obj">The instance of <see cref="JObject"/> to be parsed.</param>
-        public static GridControlMacroValue Parse(GridControl control, JObject obj) {
-            return obj == null ? null : new GridControlMacroValue(control, obj);
-        }
-
-        #endregion
-        
     }
-
 }

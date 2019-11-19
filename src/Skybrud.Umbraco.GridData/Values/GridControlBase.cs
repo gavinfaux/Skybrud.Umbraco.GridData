@@ -3,13 +3,16 @@ using Newtonsoft.Json.Linq;
 using Skybrud.Umbraco.GridData.Interfaces;
 using Skybrud.Umbraco.GridData.Json;
 using System;
+using Umbraco.Web.Composing;
+using Umbraco.Web;
 
 namespace Skybrud.Umbraco.GridData.Values {
     
     /// <summary>
     /// Abstract class with a basic implementation of the <see cref="IGridControlValue"/> interface.
+    /// Underlying value is a JToken
     /// </summary>
-    public abstract class GridControlValueBase : GridJsonObject, IGridControlValue {
+    public abstract class GridControlBase : GridJsonToken, IGridControlValue {
 
         #region Properties
 
@@ -25,16 +28,26 @@ namespace Skybrud.Umbraco.GridData.Values {
         [JsonIgnore]
         public virtual bool IsValid => true;
 
+
+        /// <summary>
+        /// shortcut for the UmbracoContext
+        /// </summary>
+        public UmbracoContext UmbracoContext => Current.UmbracoContext;
+
+        /// <summary>
+        /// Shortcut for the UmbracoHelper
+        /// </summary>
+        public UmbracoHelper Umbraco => Current.UmbracoHelper;
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance based on the specified <paramref name="control"/> and <paramref name="obj"/>.
+        /// Initializes a new instance based on the specified <paramref name="control"/> and <paramref name="token"/>.
         /// </summary>
         /// <param name="control">An instance of <see cref="GridControl"/> representing the control.</param>
-        /// <param name="obj">An instance of <see cref="JObject"/> representing the value of the control.</param>
-        protected GridControlValueBase(GridControl control, JObject obj) : base(obj) {
+        /// <param name="token">An instance of <see cref="JToken"/> representing the value of the control.</param>
+        protected GridControlBase(GridControl control, JToken token) : base(token) {
             Control = control;
         }
 

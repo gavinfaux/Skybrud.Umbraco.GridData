@@ -38,7 +38,7 @@ namespace Skybrud.Umbraco.GridData.Values {
         /// </summary>
         /// <param name="control">An instance of <see cref="GridControl"/> representing the control.</param>
         /// <param name="token">An instance of <see cref="JToken"/> representing the value of the control.</param>
-        protected GridControlHtmlValue(GridControl control, JToken token) : base(control, token) {
+        public GridControlHtmlValue(GridControl control, JToken token) : base(control, token) {
             HtmlValue = new HtmlString(Value);
         }
 
@@ -63,20 +63,6 @@ namespace Skybrud.Umbraco.GridData.Values {
         }
 
         #endregion
-
-        #region Static methods
-
-        /// <summary>
-        /// Gets a text value from the specified <paramref name="control"/> and <paramref name="token"/>.
-        /// </summary>
-        /// <param name="control">The parent control.</param>
-        /// <param name="token">The instance of <see cref="JToken"/> to be parsed.</param>
-        public new static GridControlTextValue Parse(GridControl control, JToken token) {
-            return token == null ? null : new GridControlHtmlValue(control, token);
-        }
-
-        #endregion
-
     }
 
 }

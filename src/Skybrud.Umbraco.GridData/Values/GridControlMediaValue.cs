@@ -2,13 +2,16 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Skybrud.Essentials.Json.Extensions;
+using Skybrud.Umbraco.GridData.Config;
+using Skybrud.Umbraco.GridData.Converters;
 
 namespace Skybrud.Umbraco.GridData.Values {
 
     /// <summary>
     /// Class representing the media value of a control.
     /// </summary>
-    public class GridControlMediaValue : GridControlValueBase {
+    [GridConverter("media", typeof(GridEditorMediaConfig))]
+    public class GridControlMediaValue : GridControlObjectBase {
 
         #region Properties
 
@@ -66,32 +69,21 @@ namespace Skybrud.Umbraco.GridData.Values {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance based on the specified <paramref name="control"/> and <paramref name="obj"/>.
+        /// Initializes a new instance based on the specified <paramref name="control"/> and <paramref name="token"/>.
         /// </summary>
         /// <param name="control">An instance of <see cref="GridControl"/> representing the control.</param>
-        /// <param name="obj">An instance of <see cref="JObject"/> representing the value of the control.</param>
-        protected GridControlMediaValue(GridControl control, JObject obj) : base(control, obj) {
-            FocalPoint = obj.GetObject("focalPoint", GridControlMediaFocalPoint.Parse);
-            Id = obj.GetInt32("id");
-            Image = obj.GetString("image");
-            AlternativeText = obj.GetString("altText");
-            Caption = obj.GetString("caption");
+        /// <param name="token">An instance of <see cref="JToken"/> representing the value of the control.</param>
+        public GridControlMediaValue(GridControl control, JToken token) : base(control, token) {
+            FocalPoint = JObject.GetObject("focalPoint", GridControlMediaFocalPoint.Parse);
+            Id = JObject.GetInt32("id");
+            Image = JObject.GetString("image");
+            AlternativeText = JObject.GetString("altText");
+            Caption = JObject.GetString("caption");
         }
 
         #endregion
 
-        #region Static methods
-
-        /// <summary>
-        /// Gets a media value from the specified <paramref name="control"/> and <paramref name="obj"/>.
-        /// </summary>
-        /// <param name="control">The parent control.</param>
-        /// <param name="obj">The instance of <see cref="JObject"/> to be parsed.</param>
-        public static GridControlMediaValue Parse(GridControl control, JObject obj) {
-            return obj == null ? null : new GridControlMediaValue(control, obj);
-        }
-
-        #endregion
+        
 
     }
 
